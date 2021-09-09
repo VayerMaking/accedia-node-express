@@ -1,0 +1,8 @@
+extends layout
+
+block content
+  h1= title
+  form(name='uploadForm', enctype='multipart/form-data', action='/upload', method='post')
+    input(type='file', name='uploadFile', placeholder = 'Choose file')
+    input(type='submit', placeholder = 'Submit')
+
