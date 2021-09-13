@@ -1,5 +1,6 @@
 const Pool = require('pg').Pool
 const converter = require('csvtojson');
+const { Readable } = require('stream');
 
 const pool = new Pool({
     user: 'accedia',
@@ -10,27 +11,35 @@ const pool = new Pool({
 })
 
 const uploadFile = async (file, res) => {
-    //const uploadedFile = req.files.uploadFile;
-    //console.log(file.data.toString());
-    // const parsedFile = CSVToJSON(filename, { parseNumbers: true });;
-    const jsonArray = await converter().fromFile(file);
-    // let result;
-    // converter()
-    //     .fromFile(file)
-    //     .then((jsonObj) => {
-    //         console.log(jsonObj);
-    //         result = jsonObj
-    //     })
-    // console.log(result);
-    //console.log("entered here");
-    //console.log(parsedFile.toString());
+    const Joi = require('joi');
+    const stream = Readable.from(file.data.toString());
+    const jsonArray = await converter().fromStream(stream);
+    const data = file.data;
 
-    pool.query('INSERT INTO uploaded_files (file) VALUES ($1)', [jsonArray], (error, results) => {
-        if (error) {
-            throw error
-        }
-        //res.status(201).send(`Uploaded: ${results.insertId}`)
-    })
+
+    const schema = Joi.object({
+        username: Joi.string().required(),
+        indentifier: Joi.number().required(),
+        firstName: Joi.string().required(),
+        lastame: Joi.string().required()
+    });
+
+    const validation = schema.validate(data);
+    console.log(validation);
+
+    //const formattedJSONArray = JSON.stringify(jsonArray);
+    //const parsedJSONArray = JSON.parse(formattedJSONArray);
+
+    console.log("parsed array: ", jsonArray.length);
+    jsonArray.forEach(element => {
+        pool.query('INSERT INTO uploaded_files (username, indentifier, firstName, lastName) VALUES ($1, $2, $3, $4)', [element["Username"], element["Identifier"], element["FirstName"], element["LastName"]], (error, results) => {
+            if (error) {
+                throw error
+            }
+            //res.status(201).send(`Uploaded: ${results.insertId}`)
+        })
+    });
+
 }
 
 module.exports = { uploadFile }
