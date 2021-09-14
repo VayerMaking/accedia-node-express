@@ -1,6 +1,7 @@
 var express = require('express');
 const path = require('path');
 const db = require('../queries');
+
 var router = express.Router();
 
 router.get('/', (req, res) => {
