@@ -1,5 +1,6 @@
 const Pool = require('pg').Pool
 const converter = require('csvtojson');
+const validate = require('./validation.js');
 const { Readable } = require('stream');
 
 const pool = new Pool({
@@ -10,22 +11,14 @@ const pool = new Pool({
     port: 5432,
 })
 
+
 const uploadFile = async (file, res) => {
-    const Joi = require('joi');
     const stream = Readable.from(file.data.toString());
     const jsonArray = await converter().fromStream(stream);
     const data = file.data;
 
-
-    const schema = Joi.object({
-        username: Joi.string().required(),
-        indentifier: Joi.number().required(),
-        firstName: Joi.string().required(),
-        lastame: Joi.string().required()
-    });
-
-    const validation = schema.validate(data);
-    console.log(validation);
+    validate(jsonArray);
+    //console.log(validation);
 
     //const formattedJSONArray = JSON.stringify(jsonArray);
     //const parsedJSONArray = JSON.parse(formattedJSONArray);
@@ -42,4 +35,4 @@ const uploadFile = async (file, res) => {
 
 }
 
-module.exports = { uploadFile }
+module.exports = { uploadFile, validate }
