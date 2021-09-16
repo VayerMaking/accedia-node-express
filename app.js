@@ -6,9 +6,9 @@ var logger = require('morgan');
 var fileUpload = require('express-fileupload');
 const bodyParser = require('body-parser')
 
-var indexRouter = require('./routes/index');
+var indexRouter = require('./routes/index.routes');
 var usersRouter = require('./routes/users');
-var uploadRouter = require('./routes/upload');
+var uploadRouter = require('./routes/upload.routes');
 
 global.__basedir = __dirname;
 

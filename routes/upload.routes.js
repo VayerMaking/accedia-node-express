@@ -1,7 +1,7 @@
 var express = require('express');
 const path = require('path');
-const db = require('../queries');
-const validate = require('../validation');
+const db = require('../db/queries');
+const validate = require('../validation/validation');
 const converter = require('csvtojson');
 const { Readable } = require('stream');
 
