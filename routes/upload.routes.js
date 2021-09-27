@@ -1,9 +1,9 @@
-var express = require('express');
+var express = require("express");
 
 var router = express.Router();
-const uploadController = require('../controllers/upload.controller');
-router.get('/', uploadController.loadPage)
+const uploadController = require("../controllers/upload.controller");
+router.get("/", uploadController.loadPage);
 
-router.post('/', uploadController.upload)
+router.post("/", uploadController.upload);
 
 module.exports = router;
