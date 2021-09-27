@@ -1,5 +1,5 @@
 const Pool = require("pg").Pool;
-require("dotenv").config();
+
 const environment = process.env.NODE_ENV || "development";
 const configuration = require("../config/db")[environment];
 const database = require("knex")(configuration);

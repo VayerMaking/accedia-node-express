@@ -9,7 +9,7 @@ const validation = Joi.array().items(
   })
 );
 
-const dataValidation = async (schema) => {
+const uploadValidation = async (schema) => {
   return validation.validate(schema);
 };
-module.exports = dataValidation;
+module.exports = uploadValidation;

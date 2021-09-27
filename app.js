@@ -1,6 +1,6 @@
 var createError = require("http-errors");
 var express = require("express");
-
+require("dotenv").config();
 // var indexRouter = require('./routes/index.routes');
 // var uploadRouter = require('./routes/upload.routes');
 
@@ -27,6 +27,8 @@ app.use(function (err, req, res, next) {
   res.render("error");
 });
 
-app.listen(3000, () => console.log("Listening on port 3000"));
+app.listen(process.env.APP_PORT, () =>
+  console.log("Listening on port: ", process.env.APP_PORT)
+);
 
 module.exports = app;
