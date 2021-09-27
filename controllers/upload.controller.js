@@ -24,16 +24,20 @@ module.exports = {
     }
 
     const stream = Readable.from(file.data.toString());
-    const jsonArray = await converter().fromStream(stream);
+    try {
+      const jsonArray = await converter().fromStream(stream);
+      const error = await validate(jsonArray);
 
-    const error = await validate(jsonArray);
-    console.log(error.error);
-    if (error.error) {
-      res.status(400).send(error.error.details[0].message);
-    } else {
-      uploadToDb.uploadFile(jsonArray);
+      console.log(error.error);
+      if (error.error) {
+        res.status(400).send(error.error.details[0].message);
+      } else {
+        uploadToDb.uploadFile(jsonArray);
 
-      return res.status(200).send("success");
+        return res.status(200).send("success");
+      }
+    } catch (err) {
+      return res.status(400).send(err);
     }
   },
 };
